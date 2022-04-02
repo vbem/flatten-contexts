@@ -1,6 +1,6 @@
 [![Testing](https://github.com/vbem/flatten-contexts/actions/workflows/test.yml/badge.svg)](https://github.com/vbem/flatten-contexts/actions/workflows/test.yml)
 [![Super Linter](https://github.com/vbem/flatten-contexts/actions/workflows/linter.yml/badge.svg)](https://github.com/vbem/flatten-contexts/actions/workflows/linter.yml)
-
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/vbem/flatten-contexts?label=Release&logo=github)](https://github.com/vbem/flatten-contexts/releases)
 [![Marketplace](https://img.shields.io/badge/GitHub%20Actions-Marketplace-blue?logo=github)](https://github.com/marketplace/actions/flatten-contexts)
 
 # Flatten contexts
