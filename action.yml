@@ -51,10 +51,10 @@ runs:
           echo '::endgroup::'     >&2
         }
 
-        jq -Mcre 'del(.token)|del(.event)|{github:.}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${inputs.sep}' \
+        jq -Mcre 'del(.token)|del(.event)|{github:.}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${{ inputs.sep }}' \
           | kit::wf::group '📚 GitHub context: "github" without "github.event"'
-        jq -Mcre '{github:{event:.event}}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${inputs.sep}' \
+        jq -Mcre '{github:{event:.event}}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${{ inputs.sep }}' \
           | kit::wf::group '📚 GitHub context: "github.event"'
-        jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | kit::json::flatten '${inputs.sep}' \
+        jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | kit::json::flatten '${{ inputs.sep }}' \
           | kit::wf::group '📚 GitHub context: "runner"'
 ...
