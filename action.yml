@@ -2,7 +2,7 @@
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 name: Flatten Contexts
 author: '@vbem'
-description: Dump flattened GitHub actions contexts for debugging
+description: Dump flattened GitHub contexts for friendly debugging
 branding:
   icon: align-justify
   color: green
