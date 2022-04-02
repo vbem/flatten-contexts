@@ -1,0 +1,60 @@
+---
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+name: Flatten Contexts
+author: '@vbem'
+description: Dump flattened GitHub actions contexts for debugging
+branding:
+  icon: align-justify
+  color: green
+
+inputs:
+  sep:
+    description: 'Separator between key and value'
+    required: false
+    default: ' 👉 '
+
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs-for-composite-actions
+outputs: {}
+
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-actions
+runs:
+  using: composite
+  steps:
+    - name: Dump flattened GitHub actions contexts for debugging
+      id: main
+      env:
+        STEP_CTX_GITHUB:  ${{ toJson(github) }}
+        STEP_CTX_RUNNER:  ${{ toJson(runner) }}
+      shell: bash
+      run: |
+        # implementation details
+
+        # Flatten JSON to key-value lines
+        #   $1: separator (default as ' 👉 ')
+        #   stdin: json
+        #   stdout: flattened key-value lines
+        #   $?: 0 if successful and non-zero otherwise
+        function kit::json::flatten {
+          jq -Mcr --arg sep "${1:- 👉 }" \
+            'paths(type!="object" and type!="array") as $p | {"key":$p|join("."),"value":getpath($p)} | "\(.key)\($sep)\(.value|@json)"'
+        }
+
+        # Group stdin to stderr with title
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
+        #   $1: group title
+        #   stdin: logs
+        #   stderr: grouped logs
+        #   $?: 0 if successful and non-zero otherwise
+        function kit::wf::group {
+          echo "::group::$1"      >&2
+          echo "$(< /dev/stdin)"  >&2
+          echo '::endgroup::'     >&2
+        }
+
+        jq -Mcre 'del(.token)|del(.event)|{github:.}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${inputs.sep}' \
+          | kit::wf::group '📚 GitHub context: "github" without "github.event"'
+        jq -Mcre '{github:{event:.event}}' <<< "$STEP_CTX_GITHUB" | kit::json::flatten '${inputs.sep}' \
+          | kit::wf::group '📚 GitHub context: "github.event"'
+        jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | kit::json::flatten '${inputs.sep}' \
+          | kit::wf::group '📚 GitHub context: "runner"'
+...
