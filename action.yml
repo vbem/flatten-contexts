@@ -29,16 +29,6 @@ runs:
       run: |
         # implementation details
 
-        # Flatten JSON to key-value lines
-        #   $1: separator (default as ' 👉 ')
-        #   stdin: json
-        #   stdout: flattened key-value lines
-        #   $?: 0 if successful and non-zero otherwise
-        function kit::json::flatten {
-          jq -Mcr --arg sep "${1:- 👉 }" \
-            'paths(type!="object" and type!="array") as $p | {"key":$p|join("."),"value":getpath($p)} | "\(.key)\($sep)\(.value|@json)"'
-        }
-
         # Group stdin to stderr with title
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines
         #   $1: group title
@@ -46,9 +36,19 @@ runs:
         #   stderr: grouped logs
         #   $?: 0 if successful and non-zero otherwise
         function kit::wf::group {
-          echo "::group::$1"      >&2
-          echo "$(< /dev/stdin)"  >&2
-          echo '::endgroup::'     >&2
+            echo "::group::$1"      >&2
+            echo "$(< /dev/stdin)"  >&2
+            echo '::endgroup::'     >&2
+        }
+
+        # Flatten JSON to key-value lines
+        #   $1: separator (default as ' 👉 ')
+        #   stdin: json
+        #   stdout: flattened key-value lines
+        #   $?: 0 if successful and non-zero otherwise
+        function kit::json::flatten {
+            jq -Mcr --arg sep "${1:- 👉 }" \
+            'paths(type!="object" and type!="array") as $p | {"key":$p|join("."),"value":getpath($p)} | "\(.key)\($sep)\(.value|@json)"'
         }
 
         jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | kit::json::flatten '${{ inputs.sep }}' \

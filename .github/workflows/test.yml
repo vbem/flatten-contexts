@@ -10,9 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push: # If you define neither tags(-ignore) nor branches(-ignore), the workflow will run for either branches or tags.
+  push: # If you define neither 'tags' nor 'branches', the workflow will run for either branches or tags.
     paths:
       - 'action.yml'
+      - 'src/**'
       - '.github/workflows/test.yml'
   workflow_dispatch:
 
@@ -21,7 +22,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v3 
 
       - name: Dump flattened GitHub actions contexts
         uses: ./
