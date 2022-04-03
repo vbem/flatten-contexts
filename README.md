@@ -19,4 +19,4 @@ This action can dump **"flattened"** [*GitHub contexts*](https://docs.github.com
 
 ID | Type | Default | Description
 --- | --- | --- | ---
-`Sep` | String | ` 👉 ` | Separator between key and value
+`sep` | String | ` 👉 ` | Separator between key and value
