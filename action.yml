@@ -29,7 +29,6 @@ runs:
         STEP_CTX_RUNNER:    ${{ toJson(runner) }}
         STEP_CTX_STRATEGY:  ${{ toJson(strategy) }}
         STEP_CTX_MATRIX:    ${{ toJson(matrix) }}
-        STEP_CTX_INPUTS:    ${{ toJson(inputs) }}
       shell: bash
       run: |
         # implementation details
@@ -55,7 +54,7 @@ runs:
             jq -Mcr --arg sep "${1:- 👉 }" \
             'paths(type!="object" and type!="array") as $p | {"key":$p|join("."),"value":getpath($p)} | "\(.key)\($sep)\(.value|@json)"'
         }
-        
+
         # Render the context
         #   $1: context name
         #   stdin: json
@@ -72,5 +71,4 @@ runs:
         jq -Mcre '{steps:.}' <<< "$STEP_CTX_STEPS" | render "steps"
         jq -Mcre '{strategy:.}' <<< "$STEP_CTX_STRATEGY" | render "strategy"
         jq -Mcre '{matrix:.}' <<< "$STEP_CTX_MATRIX" | render "matrix"
-        jq -Mcre '{inputs:.}' <<< "$STEP_CTX_INPUTS" | render "inputs"
 ...
