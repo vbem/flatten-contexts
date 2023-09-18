@@ -62,7 +62,7 @@ runs:
         #   stderr: redered output
         #   $?: 0 if successful and non-zero otherwise
         function render {
-            kit::json::flatten '${{ inputs.sep }}' | kit::wf::group '📚 GitHub context: "$1"'
+            kit::json::flatten '${{ inputs.sep }}' | kit::wf::group "📚 GitHub context: '$1'"
         }
 
         jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | render "runner"
