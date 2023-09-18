@@ -24,14 +24,11 @@ runs:
       id: main
       env:
         STEP_CTX_GITHUB:    ${{ toJson(github) }}
-        STEP_CTX_VARS:      ${{ toJson(vars) }}
         STEP_CTX_JOB:       ${{ toJson(job) }}
-        STEP_CTX_JOBS:      ${{ toJson(jobs) }}
         STEP_CTX_STEPS:     ${{ toJson(steps) }}
         STEP_CTX_RUNNER:    ${{ toJson(runner) }}
         STEP_CTX_STRATEGY:  ${{ toJson(strategy) }}
         STEP_CTX_MATRIX:    ${{ toJson(matrix) }}
-        STEP_CTX_NEEDS:     ${{ toJson(needs) }}
         STEP_CTX_INPUTS:    ${{ toJson(inputs) }}
       shell: bash
       run: |
@@ -71,12 +68,9 @@ runs:
         jq -Mcre '{runner:.}' <<< "$STEP_CTX_RUNNER" | render "runner"
         jq -Mcre 'del(.token)|del(.event)|{github:.}' <<< "$STEP_CTX_GITHUB" | render "github"
         jq -Mcre '{github:{event:.event}}' <<< "$STEP_CTX_GITHUB" | render "github.event"
-        jq -Mcre '{vars:.}' <<< "$STEP_CTX_VARS" | render "vars"
         jq -Mcre '{job:.}' <<< "$STEP_CTX_JOB" | render "job"
-        jq -Mcre '{jobs:.}' <<< "$STEP_CTX_JOBS" | render "jobs"
         jq -Mcre '{steps:.}' <<< "$STEP_CTX_STEPS" | render "steps"
         jq -Mcre '{strategy:.}' <<< "$STEP_CTX_STRATEGY" | render "strategy"
         jq -Mcre '{matrix:.}' <<< "$STEP_CTX_MATRIX" | render "matrix"
         jq -Mcre '{inputs:.}' <<< "$STEP_CTX_INPUTS" | render "inputs"
-        jq -Mcre '{needs:.}' <<< "$STEP_CTX_NEEDS" | render "needs"
 ...
