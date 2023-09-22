@@ -1,10 +1,6 @@
 ---
 name: Super Linter
 
-env:
-  TZ: Asia/Shanghai
-
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
 concurrency:
   group: ${{ github.workflow }}@${{ github.ref }}
   cancel-in-progress: true
@@ -15,23 +11,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  linter:
-    runs-on: [ubuntu-latest]
-    steps:
-      # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Full git history is needed to get a proper list of changed files within `super-linter`
-
-      # https://github.com/marketplace/actions/super-linter
-      - uses: super-linter/super-linter/slim@v5
-        name: 🔎🔎🔎 Run Super-Linter
-        env:
-          SUPPRESS_POSSUM: true
-          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_ACTIONS_COMMAND_ARGS: '-ignore colons -ignore line-length' # https://github.com/rhysd/actionlint/blob/main/docs/usage.md#super-linter
-          HADOLINT_FAILURE_THRESHOLD: error # https://github.com/hadolint/hadolint#configure
-          SHELLCHECK_OPTS: '--severity=warning' # https://github.com/koalaman/shellcheck#pre-commit
-          VALIDATE_BASH_EXEC: false
+  calling:
+    uses: vbem/reusable/.github/workflows/linter-default.yml@v1
 ...
