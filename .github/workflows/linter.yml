@@ -1,5 +1,5 @@
 ---
-name: Super Linter
+name: Linter
 
 concurrency:
   group: ${{ github.workflow }}@${{ github.ref }}
@@ -12,5 +12,5 @@ on:
 
 jobs:
   calling:
-    uses: vbem/reusable/.github/workflows/linter-default.yml@v1
+    uses: vbem/reusable/.github/workflows/superlinter.yml@v1
 ...
